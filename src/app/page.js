@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Card from './Card';
+
 function Movies(){
   const arr = ["Cheli","Badri","Animal","Michael Madana Kamaraju","Sakhi","100% love", "Bommarillu","Andala Rakshasi","Nachavule","Athithi","Pokiri","Ready","RRR","Attarintiki Daredi","Akasamantha"];
   const randomIndex = Math.floor(Math.random() * arr.length);
@@ -15,6 +16,16 @@ export default function Home() {
     setSelectedMovie(Movies());
   }
 
+  const UrgeWithPleasureComponent = () => (
+    <CountdownCircleTimer
+      isPlaying
+      duration={7}
+      colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+      colorsTime={[7, 5, 2, 0]}
+    >
+      {({ remainingTime }) => remainingTime}
+    </CountdownCircleTimer>
+  )
   return (
     
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -23,10 +34,17 @@ export default function Home() {
       <Card image="/YVMFront.jpg" movieName="Yeto Vellipoindi Manasu" year="2010" actors="Nani, Samantha" director="GVM"/>
       <Card image="/S-O_Sathyamurthy_album_cover.jpg" movieName="S/o Satyamurthi" year ="2015" actors="Allu Arjun, Samantha" director="Trivikram"/>
       <Card image="/pokiri.jpg" movieName = "Pokiri" year="2007" actors = "Mahesh Babu, Illeana" director = "Puri Jagannath"/>
+
       </div>
+      <div className="flex items-start justify-center z-10 ">
+      <button type="button" className="hover:bg-blue-800  text-white bg-blue-700 text-lg px-6 py-4 mt-[-35vh] rounded-md">Inka !!</button>
+
+  </div>
+  
+
       {/* <Image src="/Screenshot 2024-05-23 143402.png" alt="My Image"  layout="fill" objectFit="cover"/>
       
-      <div className="">
+      <div className=""> 
       <h1 className="text-4xl font-bold">Hello Dumb-Charades</h1>
       <div className = "text-2xl ">
       <div className="flex items-between justify-center flex-grow">
