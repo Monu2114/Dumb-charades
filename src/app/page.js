@@ -18,7 +18,7 @@ export default function Home() {
   return (
     
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-       <Image className = "opacity-40" src="/Untitled design.png" alt="My Image"  layout="fill" objectFit="cover" opacity="50"/>
+       <Image className = "opacity-40" src="/Untitled design.png" alt="My Image"  layout="fill" objectFit="cover"/>
       <div className="flex min-h-screen flex-row items-center justify-around p-24">
       <Card image="/YVMFront.jpg" movieName="Yeto Vellipoindi Manasu" year="2010" actors="Nani, Samantha" director="GVM"/>
       <Card image="/S-O_Sathyamurthy_album_cover.jpg" movieName="S/o Satyamurthi" year ="2015" actors="Allu Arjun, Samantha" director="Trivikram"/>
