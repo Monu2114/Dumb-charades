@@ -1,63 +1,58 @@
 'use client';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Card from './Card';
 
-function Movies(){
-  const arr = ["Cheli","Badri","Animal","Michael Madana Kamaraju","Sakhi","100% love", "Bommarillu","Andala Rakshasi","Nachavule","Athithi","Pokiri","Ready","RRR","Attarintiki Daredi","Akasamantha"];
-  const randomIndex = Math.floor(Math.random() * arr.length);
-  return arr[randomIndex];
-}
-
 export default function Home() {
-  const [selectedMovie, setSelectedMovie] = useState('');
+  const movies = [
+    { image: "/YVMFront.jpg", movieName: "Yeto Vellipoindi Manasu", year: "2010", actors: "Nani, Samantha", director: "GVM" },
+    { image: "/S-O_Sathyamurthy_album_cover.jpg", movieName: "S/o Satyamurthi", year: "2015", actors: "Allu Arjun, Samantha", director: "Trivikram" },
+    { image: "/pokiri.jpg", movieName: "Pokiri", year: "2007", actors: "Mahesh Babu, Illeana", director: "Puri Jagannath" },
+    {image:"/sitamma.jpeg", movieName:"Sitamma Vakitlo Sirimalle Chettu", year:"2013", actors:"Mahesh Babu, Venkatesh", director:"Srikanth Addala"},    {image:"/sakhi.avif", movieName:"Sakhi", year:"2007", actors:" Madhavan, Shalini", director:"Mani Ratnam"},
+    // Add more movies here
+    { image: "/oohalu.jpg", movieName: "Oohalu Gusagusalade", year: "2014", actors: "Naga Shaurya, Rashi Khanna", director: "Srinivas Maddula" },
+    { image: "/qvbt4yly274zmomafvlwmhkjvkq.jpg", movieName: "Gunturu Kaaram", actors: "Mahesh Babu, Srileela", director: "Trivikram" },
+    { image: "/download (10).jpeg", movieName: "Arya 2", year: "2009", actors: "Allu Arjun, Kajal Aggarwal", director: "Sukumar" },
+    { image: "/magadheera.jpg", movieName: "Magadheera", year: "2009", actors: "Ram Charan, Anushka Shetty", director: "S. S. Rajamouli" },
+    { image: "/kick.avif", movieName: "Kick", year: "2014", actors: "Ravi Teja, Ileana, Jacqueline Fernandez", director: "Sandeep Vanga" },
+    { image: "/dookudu.jpeg", movieName: "Dookudu", year: "2011", actors: "Mahesh Babu, Samantha", director: "Srinu Vaitla" },
+    { image: "/ala-vaikuntapuramlo.jpg", movieName: "Ala Vaikunthapurramloo", year: "2020", actors: "Allu Arjun, Pooja Hegde", director: "Trivikram" },
+  { image: "/bahubali.jpeg", movieName: "Baahubali 2: The Conclusion", year: "2017", actors: "Prabhas, Rana Daggubati, Anushka Shetty", director: "S. S. Rajamouli" },
+  { image: "/fidaa.jpeg", movieName: "Fidaa", year: 2017, actors: "Varun Tej, Sai Pallavi", director: "Shekhar Kammula" },
+  { image: "/Bommarillu.jpg", movieName: "Bommarillu", year: 2006, actors: "Siddharth, Genelia D'Souza", director: "Bhaskar" },
+  { image: "/happydays.jpeg", movieName: "Happy Days", year: 2007, actors: "Nani, Vaani Kapoor", director: "Sekhar Kammula" },
+  { image: "/jersey.avif", movieName: "Jersey", year: 2019, actors: "Nani, Shraddha Srinath", director: "Gowtam Tinnanuri" },
+  { image: "/oh baby.webp", movieName: "Oh! Baby", year: 2019, actors: "Samantha Ruth Prabhu, Lakshmi", director: "Nandini Reddy" },
+  { image: "/rangasthalam.jpg", movieName: "Rangasthalam 1985", year: 2018, actors: "Ram Charan, Samantha Ruth Prabhu", director: "Sukumar" },
+   ];
+  const [selectedMovies, setSelectedMovies] = useState(movies.slice(0, 3));
 
   const handleClick = () => {
-    setSelectedMovie(Movies());
+    const newMovies = [];
+    const usedIndices = new Set();
+    while (newMovies.length < 3) {
+      const randomIndex = Math.floor(Math.random() * movies.length);
+      if (!usedIndices.has(randomIndex)) {
+        newMovies.push(movies[randomIndex]);
+        usedIndices.add(randomIndex);
+      }
+    }
+    setSelectedMovies(newMovies);
   }
 
-  const UrgeWithPleasureComponent = () => (
-    <CountdownCircleTimer
-      isPlaying
-      duration={7}
-      colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-      colorsTime={[7, 5, 2, 0]}
-    >
-      {({ remainingTime }) => remainingTime}
-    </CountdownCircleTimer>
-  )
-  return (
-    
+  return ( 
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
        <Image className = "opacity-40" src="/Untitled design.png" alt="My Image"  layout="fill" objectFit="cover"/>
        <div className="flex min-h-screen flex-row items-start justify-around p-24 mt-[-10vh]">
-      <Card image="/YVMFront.jpg" movieName="Yeto Vellipoindi Manasu" year="2010" actors="Nani, Samantha" director="GVM"/>
-      <Card image="/S-O_Sathyamurthy_album_cover.jpg" movieName="S/o Satyamurthi" year ="2015" actors="Allu Arjun, Samantha" director="Trivikram"/>
-      <Card image="/pokiri.jpg" movieName = "Pokiri" year="2007" actors = "Mahesh Babu, Illeana" director = "Puri Jagannath"/>
-
+     {selectedMovies.map((movie) => (
+          <Card image={movie.image} movieName={movie.movieName} year={movie.year} actors={movie.actors} director={movie.director}/>
+        ))}
       </div>
       <div className="flex items-start justify-center z-10 ">
-      <button type="button" className="hover:bg-blue-800  text-white bg-blue-700 text-lg px-6 py-4 mt-[-35vh] rounded-md">Inka !!</button>
+      <button type="button" className="hover:bg-blue-800  text-white bg-blue-700 text-lg px-6 py-4 mt-[-35vh] rounded-md" onClick={handleClick}>Inka !!</button>
+     
 
   </div>
-  
-
-      {/* <Image src="/Screenshot 2024-05-23 143402.png" alt="My Image"  layout="fill" objectFit="cover"/>
-      
-      <div className=""> 
-      <h1 className="text-4xl font-bold">Hello Dumb-Charades</h1>
-      <div className = "text-2xl ">
-      <div className="flex items-between justify-center flex-grow">
-        <p className="text-2xl">
-          Wanna have fun with your friends? Let's play Dumb-Charades!
-        </p>
-      </div>
-      <button className="bg-blue-500 hover:bg-blue-700 text-white text-2xl mt-4 p-2 rounded transition duration-200" onClick={handleClick}>
-        Click here !!
-      </button>
-      {selectedMovie && <p className="text-2xl mt-4">{selectedMovie}</p>}
-      </div>
-      </div> */}
     </main>
   );
 }
