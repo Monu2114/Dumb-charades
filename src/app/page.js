@@ -1,4 +1,6 @@
 'use client';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay, faPause,faStop } from '@fortawesome/free-solid-svg-icons';
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Card from './Card';
@@ -53,7 +55,16 @@ export default function Home() {
     }
     return () => clearInterval(interval);
   }, [isRunning,timer]);
-  
+
+  const handlePlayPause = () => {
+    setIsRunning(!isRunning);
+  }
+
+  const handleStop = () => {
+    setIsRunning(false);
+    setTimer(minutes * 60 + seconds);
+    
+  }
   return ( 
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
        <Image className = "opacity-40" src="/Untitled design.png" alt="My Image"  layout="fill" objectFit="cover"/>
@@ -62,15 +73,21 @@ export default function Home() {
           <Card image={movie.image} movieName={movie.movieName} year={movie.year} actors={movie.actors} director={movie.director}/>
         ))}
       </div>
+      
       <div className="bg-gray-700 max-h-10.5 min-w-5 rounded-xl	">
-      <button className=" rounded-full px-10 py-20 text-white text-4xl font-bold bg-gray-700 hover:bg-gray-500">
-      <span onClick={() => setIsRunning(true)}>⏱</span> 
+      <button className="rounded-full px-10 py-20 text-white text-4xl font-bold bg-gray-700 hover:bg-gray-500">
+  <span onClick={handlePlayPause} >
+    {isRunning ? <FontAwesomeIcon icon={faPause} /> : <FontAwesomeIcon icon={faPlay} />}{'   '}
+  </span> 
+  
+  {Math.floor(timer / 60)}:{timer % 60 < 10 ? `0${timer % 60}` : timer % 60}{'     '}
+  <span onClick={handleStop}>
+        <FontAwesomeIcon icon={faStop} /> 
+  </span>
 
-      {Math.floor(timer / 60)}:{timer % 60 < 10 ? `0${timer % 60}` : timer % 60} 
-      <span>⏱</span></button> </div>
+</button> </div>
       <div className="flex items-start justify-center z-10 ">
-      <button type="button" className="hover:bg-blue-800  text-white bg-blue-700 text-lg px-6 py-4 mt-[-35vh] rounded-md" onClick={handleClick}>Inka !!</button>
-     
+      <button type="button" className="hover:bg-blue-800 text-white bg-blue-700 text-lg px-6 py-4 mt-[-55vh] rounded-md" onClick={handleClick}>Inka !!</button>     
 
   </div>
     </main>
