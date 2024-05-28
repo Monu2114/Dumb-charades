@@ -39,6 +39,20 @@ export default function Home() {
     }
     setSelectedMovies(newMovies);
   }
+  const minutes = 5;
+  const seconds = 0;
+  const [timer, setTimer] = useState(minutes * 60 + seconds);
+  const [isRunning, setIsRunning] = useState(false); 
+
+  useEffect(() => {
+    let interval;
+    if (isRunning) {
+      interval = setInterval(() => {
+        setTimer(prevTimer => prevTimer - 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isRunning,timer]);
   
   return ( 
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -49,8 +63,11 @@ export default function Home() {
         ))}
       </div>
       <div className="bg-gray-700 max-h-10.5 min-w-5 rounded-xl	">
-      <button className="  px-10 py-10 text-white text-2xl font-bold bg-gray-700 hover:bg-gray-500">5:00</button>
-</div>
+      <button className=" rounded-full px-10 py-20 text-white text-4xl font-bold bg-gray-700 hover:bg-gray-500">
+      <span onClick={() => setIsRunning(true)}>⏱</span> 
+
+      {Math.floor(timer / 60)}:{timer % 60 < 10 ? `0${timer % 60}` : timer % 60} 
+      <span>⏱</span></button> </div>
       <div className="flex items-start justify-center z-10 ">
       <button type="button" className="hover:bg-blue-800  text-white bg-blue-700 text-lg px-6 py-4 mt-[-35vh] rounded-md" onClick={handleClick}>Inka !!</button>
      
