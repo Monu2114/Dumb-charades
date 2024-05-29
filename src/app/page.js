@@ -65,6 +65,9 @@ export default function Home() {
     setTimer(minutes * 60 + seconds);
     
   }
+  const HandleMinute=()=>{
+    setTimer(timer+60);
+  }
   return ( 
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
        <Image className = "opacity-40" src="/Untitled design.png" alt="My Image"  layout="fill" objectFit="cover"/>
@@ -74,8 +77,8 @@ export default function Home() {
         ))}
       </div>
       
-      <div className="bg-gray-700 max-h-10.5 min-w-5 rounded-xl	">
-      <button className="rounded-full px-10 py-20 text-white text-4xl font-bold bg-gray-700 hover:bg-gray-500">
+      <div className="bg-gray-700 max-h-10.5 min-w-5 rounded-xl	flex flex-col">
+      <button className="flex justify-space rounded-full px-10 py-20 text-white text-4xl font-bold bg-gray-700 hover:bg-gray-500">
   <span onClick={handlePlayPause} >
     {isRunning ? <FontAwesomeIcon icon={faPause} /> : <FontAwesomeIcon icon={faPlay} />}{'   '}
   </span> 
@@ -84,7 +87,9 @@ export default function Home() {
   <span onClick={handleStop}>
         <FontAwesomeIcon icon={faStop} /> 
   </span>
-
+<span style={{border: '5px solid white', borderRadius: '50%', padding: '8px'}}  onClick={HandleMinute}  >
+ {"   "} +1
+</span>
 </button> </div>
       <div className="flex items-start justify-center z-10 ">
       <button type="button" className="hover:bg-blue-800 text-white bg-blue-700 text-lg px-6 py-4 mt-[-55vh] rounded-md" onClick={handleClick}>Inka !!</button>     
