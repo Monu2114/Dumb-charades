@@ -87,9 +87,11 @@ export default function Home() {
   <span onClick={handleStop}>
         <FontAwesomeIcon icon={faStop} /> 
   </span>
+  <div className="flex flex-col mb-[-5vh] padding-5vh">
 <span style={{border: '5px solid white', borderRadius: '50%', padding: '8px'}}  onClick={HandleMinute}  >
  {"   "} +1
 </span>
+</div>
 </button> </div>
       <div className="flex items-start justify-center z-10 ">
       <button type="button" className="hover:bg-blue-800 text-white bg-blue-700 text-lg px-6 py-4 mt-[-55vh] rounded-md" onClick={handleClick}>Inka !!</button>     
