@@ -50,7 +50,7 @@ export default function Home() {
     let interval;
     if (isRunning) {
       interval = setInterval(() => {
-        setTimer(prevTimer => prevTimer - 1);
+        setTimer( timer - 1);
       }, 1000);
     }
     return () => clearInterval(interval);
@@ -78,7 +78,7 @@ export default function Home() {
       </div>
       
       <div className="bg-gray-700 max-h-10.5 min-w-5 rounded-xl	flex flex-col">
-      <button className="flex justify-space rounded-full px-10 py-20 text-white text-4xl font-bold bg-gray-700 hover:bg-gray-500">
+      <button className="flex-row justify-space rounded-full px-10 py-20 text-white text-4xl font-bold bg-gray-700 hover:bg-gray-500">
   <span onClick={handlePlayPause} >
     {isRunning ? <FontAwesomeIcon icon={faPause} /> : <FontAwesomeIcon icon={faPlay} />}{'   '}
   </span> 
@@ -87,8 +87,8 @@ export default function Home() {
   <span onClick={handleStop}>
         <FontAwesomeIcon icon={faStop} /> 
   </span>
-  <div className="flex flex-col mb-[-5vh] padding-5vh">
-<span style={{border: '5px solid white', borderRadius: '50%', padding: '8px'}}  onClick={HandleMinute}  >
+  <div className="flex flex-row justify-center mb-[-5vh] padding-10vh">
+<span style={{border: '5px solid white', borderRadius: '50%', padding: '2px'}}  onClick={HandleMinute}  >
  {"   "} +1
 </span>
 </div>
