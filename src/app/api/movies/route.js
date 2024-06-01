@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 export async function GET(request,response) {
-  {
+  { 
     const movies = [
       { image: "/YVMFront.jpg", movieName: "Yeto Vellipoindi Manasu", year: "2010", actors: "Nani, Samantha", director: "GVM" },
       { image: "/S-O_Sathyamurthy_album_cover.jpg", movieName: "S/o Satyamurthi", year: "2015", actors: "Allu Arjun, Samantha", director: "Trivikram" },
