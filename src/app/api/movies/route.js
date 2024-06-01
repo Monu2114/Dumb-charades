@@ -22,18 +22,22 @@ export async function GET(request,response) {
     { image: "/oh baby.webp", movieName: "Oh! Baby", year: 2019, actors: "Samantha Ruth Prabhu, Lakshmi", director: "Nandini Reddy" },
     { image: "/rangasthalam.jpg", movieName: "Rangasthalam 1985", year: 2018, actors: "Ram Charan, Samantha Ruth Prabhu", director: "Sukumar" },
      ];
-    return NextResponse.json({"status":"success","data": getRandomMovies(movies, 3)});
+    return NextResponse.json({"status":"success","data": getRandomMovies(movies)});
 }
-function getRandomMovies(movies,count) {
+
+function getRandomMovies(movies) {
  
-  
-   let randomMovies = [];
-   for (let i = 0; i < count; i++) {
-     let randomIndex = Math.floor(Math.random() * movies.length);
-     randomMovies.push(movies[randomIndex]);
-     movies.splice(randomIndex, 1); // remove selected movie from array
-   }
-   return randomMovies;
+  const newMovies = [];
+    const usedIndices = new Set();
+    while (newMovies.length < 3) {
+      const randomIndex = Math.floor(Math.random() * movies.length);
+      if (!usedIndices.has(randomIndex)) {
+        newMovies.push(movies[randomIndex]);
+        usedIndices.add(randomIndex);
+      }
+    }
+   return newMovies;
  }
+
 }
 
