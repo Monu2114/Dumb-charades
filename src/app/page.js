@@ -8,14 +8,16 @@ export default function Home() {
    const [selectedMovies, setSelectedMovies] = useState([])
 
   useEffect(() => {
-    getMovies()
+     getMovies()
 
   },[]);
 
-const getMovies = () => {
-    fetch('/api/movies')
+const getMovies = async () => {
+      await fetch('/api/movies')
       .then(response => response.json())
-      .then(response => setSelectedMovies(response.data))
+      .then(response => {
+        console.error(response.data)
+        setSelectedMovies(response.data)})
       .catch(error => console.error("Error while fetching movies", error))
   }
    return ( 
@@ -29,7 +31,7 @@ const getMovies = () => {
       
       <Timer/>
       <div className="flex items-start justify-center z-10 ">
-      <button type="button" className="hover:bg-blue-800 text-white bg-blue-700 text-lg px-6 py-4 mt-[-55vh] rounded-md" onClick={getMovies}>Inka !!</button>     
+      <button type="button" className="hover:bg-blue-800 text-white bg-blue-700 text-lg px-6 py-4 mt-[-55vh] rounded-md" onClick={() => getMovies()}>Inka !!</button>     
 
   </div>
     </main>
