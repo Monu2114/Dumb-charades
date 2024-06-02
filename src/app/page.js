@@ -13,12 +13,14 @@ export default function Home() {
   },[]);
 
 const getMovies = async () => {
-      await fetch('/api/movies')
-      .then(response => response.json())
-      .then(response => {
-        console.error(response.data)
-        setSelectedMovies(response.data)})
-      .catch(error => console.error("Error while fetching movies", error))
+    try {
+      const response = await fetch('/api/movies');
+      const data = await response.json();
+      console.log(data.data); // Log to check the fetched data
+      setSelectedMovies(data.data);
+    } catch (error) {
+      console.error("Error while fetching movies", error);
+    }
   }
    return ( 
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -31,7 +33,7 @@ const getMovies = async () => {
       
       <Timer/>
       <div className="flex items-start justify-center z-10 ">
-      <button type="button" className="hover:bg-blue-800 text-white bg-blue-700 text-lg px-6 py-4 mt-[-55vh] rounded-md" onClick={() => getMovies()}>Inka !!</button>     
+      <button type="button" className="hover:bg-blue-800 text-white bg-blue-700 text-lg px-6 py-4 mt-[-55vh] rounded-md" onClick={getMovies}>Inka !!</button>     
 
   </div>
     </main>
