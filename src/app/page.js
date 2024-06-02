@@ -9,7 +9,6 @@ export default function Home() {
 
   useEffect(() => {
      getMovies()
-
   },[]);
 
 const getMovies = async () => {
