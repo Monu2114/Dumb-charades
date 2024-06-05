@@ -17,9 +17,11 @@
     "@mui/material": "^5.15.18",
     "mongodb": "^6.7.0",
     "next": "14.2.3",
+    "node-fetch": "^2.7.0",
     "react": "^18",
     "react-dom": "^18",
     "react-responsive": "^10.0.0",
+    "request": "^2.88.2",
     "styled-components": "^6.1.11"
   },
   "devDependencies": {

@@ -13,14 +13,17 @@ export default function Home() {
 
 const getMovies = async () => {
     try {
-      const response = await fetch('/api/movies');
+      const response = await fetch('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_original_language=te');
       const data = await response.json();
+
       console.log(data.data); // Log to check the fetched data
       setSelectedMovies(data.data);
     } catch (error) {
       console.error("Error while fetching movies", error);
     }
   }
+
+
    return ( 
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
        <Image className = "opacity-40" src="/Untitled design.png" alt="My Image"  layout="fill" objectFit="cover"/>
