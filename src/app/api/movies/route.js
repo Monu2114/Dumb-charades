@@ -16,7 +16,7 @@ export async function GET() {
   };
 
   try {
-    const response = await fetchWithRetry(url, options, 3); // Retry up to 3 times
+    const response = await fetchWithRetry(url, options,3); // Retry up to 3 times
     const data = await response.json();
     const movies = data.results.map(movie => ({
       title: movie.title,
@@ -25,16 +25,15 @@ export async function GET() {
       id: movie.id
     }));
     const moviesWithActors = await Promise.all(movies.map(async (movie) => {
-      const creditResponse = await fetchWithRetry(`https://api.themoviedb.org/3/movie/${movie.id}/credits`, options, 3);
+      const creditResponse = await fetch(`https://api.themoviedb.org/3/movie/${movie.id}/credits`, options);
       const creditsData = await creditResponse.json();
       const actors = creditsData.cast.slice(0, 2).map(actor => actor.name).join(', ');
       const director = creditsData.crew.find(member => member.job === 'Director')?.name || 'Unknown';
       return { ...movie, actors, director };
     }));
     return NextResponse.json({ status: "success", data: getRandomMovies(moviesWithActors) });
-  } catch (error) {
+  } catch (error) { 
     console.error('Error fetching data:', error);
-
     const movies = Movies.results.map(movie => ({
       title: movie.title,
       image: movie.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : null,
