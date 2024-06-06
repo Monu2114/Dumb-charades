@@ -13,10 +13,9 @@ export default function Home() {
 
 const getMovies = async () => {
     try {
-      const response = await fetch('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_original_language=te');
+      const response = await fetch('/api/movies');
       const data = await response.json();
 
-      console.log(data.data); // Log to check the fetched data
       setSelectedMovies(data.data);
     } catch (error) {
       console.error("Error while fetching movies", error);
@@ -29,7 +28,7 @@ const getMovies = async () => {
        <Image className = "opacity-40" src="/Untitled design.png" alt="My Image"  layout="fill" objectFit="cover"/>
        <div className="flex min-h-screen flex-row items-start justify-around p-24 mt-[-10vh]">
      {selectedMovies.map((movie) => (
-          <Card image={movie.image} movieName={movie.movieName} year={movie.year} actors={movie.actors} director={movie.director}/>
+          <Card image={movie.image} movieName={movie.title} year={movie.year} actors={movie.actors} director={movie.director}/>
         ))}
       </div>
       

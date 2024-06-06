@@ -26,9 +26,18 @@ export async function GET() {
       year:movie.release_date.substring(0,4),
       id:movie.id
     }));
+    const moviesWithActors = await Promise.all(movies.map(async (movie) => {
+      const creditResponse = await fetch(`https://api.themoviedb.org/3/movie/${movie.id}/credits`, options);
+      const creditsData = await creditResponse.json();
+      const actors = creditsData.cast.map(actor => actor.name).slice(0, 2).join(', ');
+      const director = creditsData.crew.find(member => member.job === 'Director')?.name || 'Unknown';
+      // Get top 2 actors
+      return { ...movie, actors,director};
+    }));
+    return new Response(JSON.stringify({ status: "success", data: getRandomMovies(moviesWithActors) }), { status: 200 });
     
     
-    return NextResponse.json({ status: 'success', data: getRandomMovies(movies) });
+    // return NextResponse.json({ status: 'success', data: getRandomMovies(movies) });
   } catch (error) {
     console.error('Error fetching data:', error);
     return NextResponse.json({ status: 'error', message: 'Failed to fetch data', error: error.message });
