@@ -29,7 +29,7 @@ export async function GET() {
     const moviesWithActors = await Promise.all(movies.map(async (movie) => {
       const creditResponse = await fetch(`https://api.themoviedb.org/3/movie/${movie.id}/credits`, options);
       const creditsData = await creditResponse.json();
-      const actors = creditsData.cast.map(actor => actor.name).slice(0, 2).join(', ');
+      const actors = creditsData.cast.slice(0, 2).map(actor => actor.name).join(', ');
       const director = creditsData.crew.find(member => member.job === 'Director')?.name || 'Unknown';
       // Get top 2 actors
       return { ...movie, actors,director};
