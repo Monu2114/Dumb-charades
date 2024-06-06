@@ -16,21 +16,16 @@ export async function GET() {
 
   try {
     const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch data: ${response.statusText}`);
+    }
     const data = await response.json();
     const movies = await processData(data, options);
     
     return NextResponse.json({ status: "success", data: getRandomMovies(movies) });
-  } 
-  catch (error) { 
+  } catch (error) { 
     console.error('Error fetching data:', error);
-    const movies = Movies.results.map(movie => ({
-      title: movie.title,
-      image: movie.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : null,
-      year: movie.release_date ? movie.release_date.substring(0, 4) : 'Unknown', // Check if release_date exists
-      id: movie.id,
-      actors: 'N/A',  // Set default values
-      director: 'N/A'
-    })); // Fallback to local data
+    const movies = processLocalData(Movies);
     return NextResponse.json({ status: 'error but json', message: 'Failed to fetch data', error: error.message, data: getRandomMovies(movies) });
   }
 }
@@ -39,20 +34,39 @@ async function processData(data, options) {
   const movies = data.results.map(movie => ({
     title: movie.title,
     image: movie.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : null,
-    year: movie.release_date ? movie.release_date.substring(0, 4) : 'Unknown', // Check if release_date exists
+    year: movie.release_date ? movie.release_date.substring(0, 4) : 'Unknown',
     id: movie.id
   }));
 
   const moviesWithActors = await Promise.all(movies.map(async (movie) => {
-    const creditResponse = await fetch(`https://api.themoviedb.org/3/movie/${movie.id}/credits`, options);
-    const creditsData = await creditResponse.json();
-    const actors = creditsData.cast.slice(0, 2).map(actor => actor.name).join(', ');
-    const director = creditsData.crew.find(member => member.job === 'Director')?.name || 'Unknown';
+    try {
+      const creditResponse = await fetch(`https://api.themoviedb.org/3/movie/${movie.id}/credits`, options);
+      if (!creditResponse.ok) {
+        throw new Error(`Failed to fetch credits for movie ID ${movie.id}`);
+      }
+      const creditsData = await creditResponse.json();
+      const actors = creditsData.cast.slice(0, 2).map(actor => actor.name).join(', ');
+      const director = creditsData.crew.find(member => member.job === 'Director')?.name || 'Unknown';
 
-    return { ...movie, actors, director };
+      return { ...movie, actors, director };
+    } catch (error) {
+      console.error(`Error fetching credits for movie ID ${movie.id}:`, error);
+      return { ...movie, actors: 'N/A', director: 'N/A' };
+    }
   }));
 
   return moviesWithActors;
+}
+
+function processLocalData(localData) {
+  return localData.results.map(movie => ({
+    title: movie.title,
+    image: movie.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : null,
+    year: movie.release_date ? movie.release_date.substring(0, 4) : 'Unknown',
+    id: movie.id,
+    actors: 'N/A',  // Set default values
+    director: 'N/A' // Set default values
+  }));
 }
 
 function getRandomMovies(movies) {
