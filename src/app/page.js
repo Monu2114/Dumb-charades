@@ -5,11 +5,13 @@ import Card from './Card';
 import Timer from './Timer';
 
 export default function Home() {
-   const [selectedMovies, setSelectedMovies] = useState([])
+   const [selectedMovies, setSelectedMovies] = useState([{ image: "/YVMFront.jpg", movieName: "Yeto Vellipoindi Manasu", year: "2010", actors: "Nani, Samantha", director: "GVM" },
+    { image: "/S-O_Sathyamurthy_album_cover.jpg", movieName: "S/o Satyamurthi", year: "2015", actors: "Allu Arjun, Samantha", director: "Trivikram" },
+    { image: "/pokiri.jpg", movieName: "Pokiri", year: "2007", actors: "Mahesh Babu, Illeana", director: "Puri Jagannath" }])
 
-  useEffect(() => {
-     getMovies()
-  },[]);
+  // useEffect(() => {
+  //    getMovies()
+  // },[]);
 
 const getMovies = async () => {
     try {
@@ -34,7 +36,7 @@ const getMovies = async () => {
       
       <Timer/>
       <div className="flex items-start justify-center z-10 ">
-      <button type="button" className="hover:bg-blue-800 text-white bg-blue-700 text-lg px-6 py-4 mt-[-55vh] rounded-md" onClick={getMovies}>Inka !!</button>     
+      <button type="button" className="hover:bg-blue-800 text-white bg-blue-700 text-lg px-6 py-4 mt-[-58vh] rounded-md" onClick={getMovies}>Inka !!</button>     
 
   </div>
     </main>
