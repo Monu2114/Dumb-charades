@@ -23,7 +23,12 @@ export async function GET() {
   } 
   catch (error) { 
     console.error('Error fetching data:', error);
-    const movies = await processData(Movies, options); // Fallback to local data
+    const movies = data.results.map(movie => ({
+      title: movie.title,
+      image: movie.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : null,
+      year: movie.release_date ? movie.release_date.substring(0, 4) : 'Unknown', // Check if release_date exists
+      id: movie.id
+    })); // Fallback to local data
     return NextResponse.json({ status: 'error but json', message: 'Failed to fetch data', error: error.message, data: getRandomMovies(movies) });
   }
 }
