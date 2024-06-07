@@ -41,6 +41,17 @@ export default function Home() {
     return await Promise.all(processedMovies.map(movie => processMovieCredits(movie, options)));
   };
 
+  const processLocalData = (localData) => {
+    return localData.results.map(movie => ({
+      id: movie.id,
+      title: movie.title,
+      image: movie.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : null,
+      year: movie.release_date ? movie.release_date.substring(0, 4) : 'Unknown',
+      actors: 'N/A',
+      director: 'N/A'
+    }));
+  };
+
   const getRandomMovies = (movies) => {
     const newMovies = [];
     const usedIndices = new Set();
@@ -82,8 +93,9 @@ export default function Home() {
   
     } catch (error) { 
       console.error('Error fetching data:', error);
-      const movies = getRandomMovies(processMovies(Movies));
-      setSelectedMovies(movies);
+      const movies = getRandomMovies(processLocalData(Movies));
+      const moviesWithCredits = await processMovies(movies, options);
+      setSelectedMovies(moviesWithCredits);
     }
   }
 
