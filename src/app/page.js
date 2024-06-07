@@ -87,8 +87,9 @@ const getMovies = async () => {
       throw new Error(`Failed to fetch data: ${response.statusText}`);
     }
     const data = await response.json();
-    const movies = await processData(data, options); 
-     setSelectedMovies(getRandomMovies(movies));
+    movieNames = getRandomMovies(data.results);
+    const movies = await processData(movieNames, options); 
+     setSelectedMovies(movies);
   
     } catch (error) { 
     console.error('Error fetching data:', error);
