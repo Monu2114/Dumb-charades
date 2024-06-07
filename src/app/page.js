@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Card from './Card';
 import Timer from './Timer';
+import Movies from './api/movies/movies.json';
+export const dynamic = 'force-dynamic';
 
 export default function Home() {
    const [selectedMovies, setSelectedMovies] = useState([{ image: "/YVMFront.jpg", movieName: "Yeto Vellipoindi Manasu", year: "2010", actors: "Nani, Samantha", director: "GVM" },
@@ -12,13 +14,89 @@ export default function Home() {
   // useEffect(() => {
   //    getMovies()
   // },[]);
+  const processData = async (data, options) => {
+    const movies = data.results.map(movie => ({
+      title: movie.title,
+      image: movie.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : null,
+      year: movie.release_date ? movie.release_date.substring(0, 4) : 'Unknown',
+      id: movie.id
+    }));
 
+    const moviesWithActors = await Promise.all(movies.map(async (movie) => {
+      try {
+        const creditResponse = await fetch(`https://api.themoviedb.org/3/movie/${movie.id}/credits`, options);
+        if (!creditResponse.ok) {
+          throw new Error(`Failed to fetch credits for movie ID ${movie.id}`);
+        }
+        const creditsData = await creditResponse.json();
+        const actors = creditsData.cast.slice(0, 2).map(actor => actor.name).join(', ');
+        const director = creditsData.crew.find(member => member.job === 'Director')?.name || 'Unknown';
+
+        return { ...movie, actors, director };
+      } catch (error) {
+        console.error(`Error fetching credits for movie ID ${movie.id}:`, error);
+        return { ...movie, actors: 'N/A', director: 'N/A' };
+      }
+    }));
+
+    return moviesWithActors;
+  };
+
+  const processLocalData = (localData) => {
+    return localData.results.map(movie => ({
+      title: movie.title,
+      image: movie.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : null,
+      year: movie.release_date ? movie.release_date.substring(0, 4) : 'Unknown',
+      id: movie.id,
+      actors: 'N/A',
+      director: 'N/A'
+    }));
+  };
+
+  const getRandomMovies = (movies) => {
+    const newMovies = [];
+    const usedIndices = new Set();
+
+    while (newMovies.length < 3 && movies.length > 0) {
+      const randomIndex = Math.floor(Math.random() * movies.length);
+      if (!usedIndices.has(randomIndex)) {
+        newMovies.push(movies[randomIndex]);
+        usedIndices.add(randomIndex);
+      }
+    }
+
+    return newMovies;
+  };
 const getMovies = async () => {
     try {
-      const response = await fetch('/api/movies');
-      const data = await response.json();
+      const totalPages = 144;
+  const page = Math.floor(Math.random() * totalPages) + 1;
+  
+  const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&with_original_language=te`;
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2Mzk2YThmOWMyOGM5YmZhMzBkMDZlZTRjZWZlYzFkZCIsInN1YiI6IjY2NWJmY2Q4Mzg4MjZiYmVlYTcxYzA2MCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.DuCHyJVL2Jkd1JWe9bjkL1Ajc0pkAoItcJKBHBerMQY'
+    }
+  };
 
-      setSelectedMovies(data.data);
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch data: ${response.statusText}`);
+    }
+    const data = await response.json();
+    const movies = await processData(data, options); 
+     setSelectedMovies(getRandomMovies(movies));
+  
+    } catch (error) { 
+    console.error('Error fetching data:', error);
+    const movies = processLocalData(Movies);
+    setSelectedMovies(getRandomMovies(movies));
+
+  }
+      
     } catch (error) {
       console.error("Error while fetching movies", error);
     }
