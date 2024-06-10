@@ -5,6 +5,7 @@ import Card from './Card';
 import Timer from './Timer';
 import Movies from './api/movies/movies.json';
 export const dynamic = 'force-dynamic';
+import { useMediaQuery } from 'react-responsive';
 
 export default function Home() {
   const [selectedMovies, setSelectedMovies] = useState([
@@ -101,14 +102,22 @@ export default function Home() {
   useEffect(() => {
      getMovies();
   },[]);
+  const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
 
   return ( 
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
        <Image className = "opacity-40" src="/Untitled design.png" alt="My Image"  layout="fill" objectFit="cover"/>
        <div className="md flex min-h-screen flex-row items-start justify-around p-24 mt-[-10vh]">
-     {selectedMovies.map((movie) => (
+       {isMobile ? (
+          <Card key={selectedMovies[0].id} image={selectedMovies[0].image} movieName={selectedMovies[0].title} year={selectedMovies[0].year} actors={selectedMovies[0].actors} director={selectedMovies[0].director}/>
+        ) : (
+          selectedMovies.map((movie) => (
+            <Card key={movie.id} image={movie.image} movieName={movie.title} year={movie.year} actors={movie.actors} director={movie.director}/>
+          ))
+        )}
+     {/* {selectedMovies.map((movie) => (
           <Card key={movie.id} image={movie.image} movieName={movie.title} year={movie.year} actors={movie.actors} director={movie.director}/>
-        ))}
+        ))} */}
       </div>
       
       <Timer/>
