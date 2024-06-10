@@ -105,7 +105,7 @@ export default function Home() {
   return ( 
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
        <Image className = "opacity-40" src="/Untitled design.png" alt="My Image"  layout="fill" objectFit="cover"/>
-       <div className="flex min-h-screen flex-row items-start justify-around p-24 mt-[-10vh]">
+       <div className="md flex min-h-screen flex-row items-start justify-around p-24 mt-[-10vh]">
      {selectedMovies.map((movie) => (
           <Card key={movie.id} image={movie.image} movieName={movie.title} year={movie.year} actors={movie.actors} director={movie.director}/>
         ))}
