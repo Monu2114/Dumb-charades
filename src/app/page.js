@@ -94,8 +94,7 @@ export default function Home() {
     } catch (error) { 
       console.error('Error fetching data:', error);
       const movies = getRandomMovies(processLocalData(Movies));
-      const moviesWithCredits = await processMovies(movies, options);
-      setSelectedMovies(moviesWithCredits);
+      setSelectedMovies(movies);
     }
   }
 
