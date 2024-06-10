@@ -8,9 +8,9 @@ export const dynamic = 'force-dynamic';
 
 export default function Home() {
   const [selectedMovies, setSelectedMovies] = useState([
-    { image: "/YVMFront.jpg", movieName: "Yeto Vellipoindi Manasu", year: "2010", actors: "Nani, Samantha", director: "GVM" },
-    { image: "/S-O_Sathyamurthy_album_cover.jpg", movieName: "S/o Satyamurthi", year: "2015", actors: "Allu Arjun, Samantha", director: "Trivikram" },
-    { image: "/pokiri.jpg", movieName: "Pokiri", year: "2007", actors: "Mahesh Babu, Illeana", director: "Puri Jagannath" }
+    { image: "/YVMFront.jpg", title: "Yeto Vellipoindi Manasu", year: "2010", actors: "Nani, Samantha", director: "GVM" },
+    { image: "/S-O_Sathyamurthy_album_cover.jpg", title: "S/o Satyamurthi", year: "2015", actors: "Allu Arjun, Samantha", director: "Trivikram" },
+    { image: "/pokiri.jpg", title: "Pokiri", year: "2007", actors: "Mahesh Babu, Illeana", director: "Puri Jagannath" }
   ]);
 
   const processMovieCredits = async (movie, options) => {
@@ -98,10 +98,9 @@ export default function Home() {
     }
   }
 
-  // Uncomment this if you want to load movies on component mount
-  // useEffect(() => {
-  //    getMovies();
-  // },[]);
+  useEffect(() => {
+     getMovies();
+  },[]);
 
   return ( 
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
