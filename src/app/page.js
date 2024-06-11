@@ -6,6 +6,7 @@ import Timer from './Timer';
 import Movies from './api/movies/movies.json';
 export const dynamic = 'force-dynamic';
 import { useMediaQuery } from 'react-responsive';
+import { useSwipeable } from 'react-swipeable';
 
 export default function Home() {
   const [selectedMovies, setSelectedMovies] = useState([
@@ -13,6 +14,14 @@ export default function Home() {
     { image: "/S-O_Sathyamurthy_album_cover.jpg", title: "S/o Satyamurthi", year: "2015", actors: "Allu Arjun, Samantha", director: "Trivikram" },
     { image: "/pokiri.jpg", title: "Pokiri", year: "2007", actors: "Mahesh Babu, Illeana", director: "Puri Jagannath" }
   ]);
+  const [currentIndex, setCurrentIndex] = useState(0); // State to track the current index
+
+  const handlers = useSwipeable({
+    onSwipedLeft: () => setCurrentIndex((prevIndex) => (prevIndex + 1) % selectedMovies.length), // Go to next movie
+    onSwipedRight: () => setCurrentIndex((prevIndex) => (prevIndex - 1 + selectedMovies.length) % selectedMovies.length), // Go to previous movie
+    preventDefaultTouchmoveEvent: true, // Prevent scrolling during swipe
+    trackMouse: true // Optional: if you want to enable swiping with mouse on desktop
+  });
 
   const processMovieCredits = async (movie, options) => {
     try {
@@ -109,7 +118,16 @@ export default function Home() {
        <Image className = "opacity-40" src="/Untitled design.png" alt="My Image"  layout="fill" objectFit="cover"/>
        <div className="md flex min-h-screen flex-row items-start justify-around p-24 mt-[-10vh]">
        {isMobile ? (
-          <Card key={selectedMovies[0].id} image={selectedMovies[0].image} movieName={selectedMovies[0].title} year={selectedMovies[0].year} actors={selectedMovies[0].actors} director={selectedMovies[0].director}/>
+          <div {...handlers}>
+            <Card 
+              key={selectedMovies[currentIndex].id} 
+              image={selectedMovies[currentIndex].image} 
+              movieName={selectedMovies[currentIndex].title} 
+              year={selectedMovies[currentIndex].year} 
+              actors={selectedMovies[currentIndex].actors} 
+              director={selectedMovies[currentIndex].director}
+            />
+          </div>
         ) : (
           selectedMovies.map((movie) => (
             <Card key={movie.id} image={movie.image} movieName={movie.title} year={movie.year} actors={movie.actors} director={movie.director}/>
