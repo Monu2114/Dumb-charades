@@ -5,6 +5,9 @@ import Card from './Card';
 import Timer from './Timer';
 import Movies from './api/movies/movies.json';
 export const dynamic = 'force-dynamic';
+import { useMediaQuery } from 'react-responsive';
+import { useSwipeable } from 'react-swipeable';
+import TinderCard from 'react-tinder-card'
 
 export default function Home() {
   const [selectedMovies, setSelectedMovies] = useState([
@@ -12,6 +15,25 @@ export default function Home() {
     { image: "/S-O_Sathyamurthy_album_cover.jpg", title: "S/o Satyamurthi", year: "2015", actors: "Allu Arjun, Samantha", director: "Trivikram" },
     { image: "/pokiri.jpg", title: "Pokiri", year: "2007", actors: "Mahesh Babu, Illeana", director: "Puri Jagannath" }
   ]);
+  const [currentIndex, setCurrentIndex] = useState(0); // State to track the current index
+
+  const handlers = useSwipeable({
+    onSwipedLeft: () => {
+      setCurrentIndex((prevIndex) => {
+        const newIndex = (prevIndex + 1) % selectedMovies.length;
+        if (newIndex === 0) {
+          getMovies();
+        }
+        return newIndex;
+        
+      });
+    },
+    onSwipedRight: () => {
+      setCurrentIndex((prevIndex) => (prevIndex - 1 + selectedMovies.length) % selectedMovies.length);
+    },
+    preventDefaultTouchmoveEvent: true, // Prevent scrolling during swipe
+    trackMouse: true // Optional: if you want to enable swiping with mouse on desktop
+  });
 
   const processMovieCredits = async (movie, options) => {
     try {
@@ -101,20 +123,50 @@ export default function Home() {
   useEffect(() => {
      getMovies();
   },[]);
+  const onSwipe = (direction) => {
+    console.log('You swiped: ' + direction)
+  }
+  
+  const onCardLeftScreen = (myIdentifier) => {
+    console.log(myIdentifier + ' left the screen')
+  }
+  const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
 
   return ( 
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-       <Image className = "opacity-40" src="/Untitled design.png" alt="My Image"  layout="fill" objectFit="cover"/>
-       <div className="flex min-h-screen flex-row items-start justify-around p-24 mt-[-10vh]">
-     {selectedMovies.map((movie) => (
-          <Card key={movie.id} image={movie.image} movieName={movie.title} year={movie.year} actors={movie.actors} director={movie.director}/>
-        ))}
+    <main className="flex min-h-screen flex-col items-center justify-between p-4 md:p-24">
+      <Image className="opacity-40" src="/Untitled design.png" alt="My Image" layout="fill" objectFit="cover"/>
+      <div className="flex min-h-screen flex-col items-center md:flex-row md:items-start justify-around w-full p-4 md:p-24 mt-[-10vh] z-10">
+        {isMobile ? (
+          <div {...handlers} className="flex flex-col items-center justify-center w-full">
+       <TinderCard onSwipe={onSwipe} onCardLeftScreen={() => onCardLeftScreen('fooBar')}><Card 
+              key={selectedMovies[currentIndex].id} 
+              image={selectedMovies[currentIndex].image} 
+              movieName={selectedMovies[currentIndex].title} 
+              year={selectedMovies[currentIndex].year} 
+              actors={selectedMovies[currentIndex].actors} 
+              director={selectedMovies[currentIndex].director}
+            /></TinderCard>
+
+            
+            <div className="md:mt-4">
+              <Timer />
+            </div>
+          </div>
+        ) : (
+          
+          selectedMovies.map((movie) => (
+            <Card key={movie.id} image={movie.image} movieName={movie.title} year={movie.year} actors={movie.actors} director={movie.director}/>
+          ))
+            
+        )}
       </div>
-      
+       <div className="hidden md:inline">
       <Timer/>
-      <div className="flex items-start justify-center z-10 ">
-      <button type="button" className="hover:bg-blue-800 text-white bg-blue-700 text-lg px-6 py-4 mt-[-58vh] rounded-md" onClick={getMovies}>Inka !!</button>     
+      <div className="flex items-start justify-center  ">
+      <button type="button" className="hover:bg-blue-800 text-white bg-blue-700 text-lg px-6 py-4 mt-[-58vh] rounded-md z-10" onClick={getMovies}>Inka !!</button>     
+      </div>
   </div>
+
     </main>
   );
 }
